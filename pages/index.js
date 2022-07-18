@@ -3,18 +3,19 @@ import { css } from "@emotion/react";
 import Head from "next/head";
 import { Canvas } from "@react-three/fiber";
 import BoxPositionController from "../components/boxPositionController";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { PerspectiveCamera } from "three";
 import Image from "next/image";
 import Ball from "../components/threeObject/ball";
 import PointLight from "../components/threeLight/pointLight";
 
 export default function Home() {
+  const canvasRef = useRef();
   const [boxX, setBoxX] = useState(0);
   const [boxY, setBoxY] = useState(0);
-  const [boxZ, setBoxZ] = useState(-10);
+  const [boxZ, setBoxZ] = useState(-20);
 
-  var perspectiveCamera = new PerspectiveCamera(50, 1, 0.1, 20);
+  var perspectiveCamera = new PerspectiveCamera(50, 1, 0.1, 100);
 
   return (
     <div>
@@ -26,15 +27,15 @@ export default function Home() {
       <main css={mainStyle}>
         <Image src="/img/space.jpg" layout="fill" />
         <div css={canvasStyle}>
-          <Canvas camera={perspectiveCamera}>
+          <Canvas camera={perspectiveCamera} ref={canvasRef}>
             <Ball position={[boxX, boxY, boxZ]} />
             {/* <Box position={[boxX, boxY, boxZ]} /> */}
-            {/* <directionalLight
+            <directionalLight
               color={"#fff"}
               intensity={1}
               position={[1, 1, 1]}
-            /> */}
-            <PointLight position={[boxX, boxY, boxZ]} />
+            />
+            <PointLight position={[boxX, boxY, boxZ]} canvasRef={canvasRef}/>
           </Canvas>
         </div>
         <BoxPositionController
